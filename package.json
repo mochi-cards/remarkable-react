@@ -1,6 +1,6 @@
 {
   "name": "remarkable-react",
-  "version": "0.0.0-development",
+  "version": "1.4.3",
   "description": "React markdown adapter for Remarkable",
   "main": "lib/remarkable-react.cjs.js",
   "module": "lib/remarkable-react.esm.js",
@@ -9,7 +9,8 @@
     "lint": "eslint --config .eslintrc ./src ./test",
     "test": "jest ./test",
     "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "prepublishOnly": "yarn build"
   },
   "files": [
     "lib"

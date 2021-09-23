@@ -18,9 +18,10 @@ export default class Renderer {
     });
   }
 
-  render(tokens = [], remarkableOptions) {
+  render(tokens = [], remarkableOptions, env) {
     return this.renderTokenTree(
-      this.buildTokenTree(tokens, remarkableOptions)
+      this.buildTokenTree(tokens, remarkableOptions),
+      env
     );
   }
 
@@ -28,15 +29,15 @@ export default class Renderer {
     return new TokenTree(tokens, this.options, remarkableOptions);
   }
 
-  renderTokenTree(token, index = 0) {
-    if (Array.isArray(token)) return token.map((token, indx) => this.renderTokenTree(token, indx));
+  renderTokenTree(token, env, index = 0) {
+    if (Array.isArray(token)) return token.map((token, indx) => this.renderTokenTree(token, env, indx));
     if (!token || !token.type) return token;
     if (!this.options.components[token.type]) return null;
 
     return React.createElement(
-      this.options.components[token.type], assign({}, token.props, {
+      this.options.components[token.type], assign({}, env, token.props, {
         key: this.options.keyGen(token, index),
-      }), this.renderTokenTree(token.children),
+      }), this.renderTokenTree(token.children, env),
     );
   }
 }
