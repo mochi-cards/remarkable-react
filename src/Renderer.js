@@ -20,13 +20,13 @@ export default class Renderer {
 
   render(tokens = [], remarkableOptions, env) {
     return this.renderTokenTree(
-      this.buildTokenTree(tokens, remarkableOptions),
+      this.buildTokenTree(tokens, remarkableOptions, env),
       env
     );
   }
 
-  buildTokenTree(tokens, remarkableOptions) {
-    return new TokenTree(tokens, this.options, remarkableOptions);
+  buildTokenTree(tokens, remarkableOptions, env) {
+    return new TokenTree(tokens, this.options, remarkableOptions, env);
   }
 
   renderTokenTree(token, env, index = 0) {

@@ -1,3 +1,5 @@
+import assign from './assign';
+
 const OPEN_IDENTIFIER = '_open';
 const CLOSE_IDENTIFIER = '_close';
 const INLINE_TYPE = 'inline';
@@ -7,11 +9,12 @@ const isCloseToken = ({ type }) => type.includes(CLOSE_IDENTIFIER);
 const isInlineToken = ({ type }) => type === INLINE_TYPE;
 
 export default class TokenTree {
-  constructor(tokens = [], options, rOptions) {
+  constructor(tokens = [], options, rOptions, env) {
     this.i = -1;
     this.tokens = tokens;
     this.options = options;
     this.rOptions = rOptions;
+    this.env = env;
 
     return this.buildTokenTree();
   }
@@ -58,7 +61,7 @@ export default class TokenTree {
       } else if (isCloseToken(ts[this.i])) {
         return collection;
       } else if (isInlineToken(ts[this.i])) {
-        new this.constructor(ts[this.i].children, this.options, this.rOptions)
+        new this.constructor(ts[this.i].children, this.options, this.rOptions, this.env)
           .forEach((token) => collection.push(token));
       } else {
         collection.push(this.buildToken(ts[this.i]));
@@ -90,7 +93,7 @@ export default class TokenTree {
     if (!resolver) return;
 
     if (typeof resolver === 'function') {
-      return this.resolveFunctionProp(type, resolver(propValue, type, token), prop, propValue);
+      return this.resolveFunctionProp(type, resolver(propValue, type, token, this.env), prop, propValue);
     }
 
     if (typeof resolver === 'string') {
