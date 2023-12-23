@@ -34,8 +34,10 @@ export default class Renderer {
     if (!token || !token.type) return token;
     if (!this.options.components[token.type]) return null;
 
+    let envProps = typeof this.options.components[token.type] === "string" ? {} : env;
+
     return React.createElement(
-      this.options.components[token.type], assign({}, env, token.props, {
+      this.options.components[token.type], assign({}, envProps, token.props, {
         key: this.options.keyGen(token, index),
       }), this.renderTokenTree(token.children, env),
     );
